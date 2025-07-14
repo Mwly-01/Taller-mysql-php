@@ -15,6 +15,6 @@ services:
       - mysql-pdo-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: php_pbo
+      MYSQL_DATABASE: taller_api
 volumes:
   mysql-pdo-data:
