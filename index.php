@@ -53,9 +53,14 @@ switch ($recurso) {
                 $data['id'] = $pdo->lastInsertId();
                 echo json_encode($data);
                 break;
-            case '':
-                # code...
-                break; 
+            case 'PUT':
+               IDNoEncontrado($id);
+               $data = json_decode(file_get_contents('php://input'),true);
+               $stmt = $pdo->prepare("UPDATE categorias SET id =?, nombre=? WHERE id=?");
+               $stmt->execute([$data['id'],$data['nombre'],$id,]);
+               echo json_encode($data);
+               break;
+                
         }
         break;
 }
