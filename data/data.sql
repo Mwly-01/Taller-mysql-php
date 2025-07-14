@@ -29,3 +29,18 @@ CREATE TABLE IF NOT EXISTS promociones(
     producto_id INT,
     Foreign Key (producto_id) REFERENCES productos(id)
 )
+
+
+INSERT INTO categorias (nombre) VALUES
+('TECNOLOGIA'),
+('ROPA'),
+('DULCES');
+
+INSERT INTO productos (nombre,precio,categoria_id)VALUES
+('computadora',1500.00,'1'),
+('torta',9.00,'3'),
+('camisa',150.00,'2');
+
+INSERT INTO promociones(descripcion,descuento,producto_id)VALUES
+('descuento de eletrodomesticos', 15.00,1),
+('camisas al mejor precio', 5.00,3);

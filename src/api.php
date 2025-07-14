@@ -2,30 +2,60 @@
 
 require_once "db.php";
 
-// está haciendo: GET, POST, PUT, DELETE
-$method = $_SERVER['REQUEST_METHOD'];
+header('Content-Type: application/json');
 
-//separa por segmentos
+$method = $_SERVER['REQUEST_METHOD'];
 $url = explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 
-// Guarda el primer segmento de la URL (recurso)
-$recurso = $url[0];
-
-// Guarda  (ID si existe)
+$recurso = $url[0] ?? null;
 $id = $url[1] ?? null;
 
-header('Content-Type: application/json'); // La respuesta será JSON
+// Lista de recursos válidos
+$recursos_validos = ['productos', 'categorias', 'promociones', 'productos-promocion'];
 
-// EndPoint: Valida que el recurso exista
-if ($recurso !== 'productos' && $recurso !== 'categorias' && $recurso !== 'promociones' && $recurso !== 'productos-promocion') {
-    http_response_code(404);
+// Si el recurso no es válido
+if (!in_array($recurso, $recursos_validos)) {
+    responderError(404, 'Recurso no encontrado');
+}
+
+// ------------------------- FUNCIONES AUXILIARES -----------------------------
+
+function responderError($codigo, $mensaje) {
+    http_response_code($codigo);
     echo json_encode([
-        'error' => 'Recurso no encontrado',
-        'code' => 404,
-        'errorUrl' => 'https://http.cat/404'
+        'error' => $mensaje,
+        'code' => $codigo,
+        'errorUrl' => "https://http.cat/$codigo"
     ]);
     exit;
 }
 
-//aparatado de la API
+function validarID($id) {
+    if (!$id) {
+        responderError(400, 'ID requerido');
+    }
+}
+//categoria GET
+switch ($recurso){
+    case 'categoria':
+        switch($method){
+            case GET:
+                if ($id){
+                $stmt = $pdo->prepare("SELECT nombre AS tipo de categoria FROM categorias WHERE id = ?");
+                $stmt->execute([$id]);
+                $categoria = $stmt->fetch(PDO::FETCH_ASSOC);
 
+                if ($categoria) {
+                    echo json_encode($categoria);
+                }   else {
+                    http_response_code(404);
+                    echo json_encode(['error' => 'no se encontro la categoria']);
+                } 
+            }else{
+                $stmt =$pdo->prepare("SELECT nombre AS tipo de categoria FROM categorias");
+                $stmt->$execute();
+                $response = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($response);
+            }
+        }
+}
