@@ -1,4 +1,4 @@
--- Active: 1752520654667@@127.0.0.1@3306@php_pbo
+-- Active: 1752442371044@@127.0.0.1@3306@php_pbo
 
 CREATE DATABASE IF NOT EXISTS taller_api;
 USE  taller_api;
@@ -44,3 +44,7 @@ INSERT INTO productos (nombre,precio,categoria_id)VALUES
 INSERT INTO promociones(descripcion,descuento,producto_id)VALUES
 ('descuento de eletrodomesticos', 15.00,1),
 ('camisas al mejor precio', 5.00,3);
+
+
+
+SELECT * FROM categorias;

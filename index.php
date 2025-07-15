@@ -52,18 +52,33 @@ switch ($recurso) {
                 http_response_code(201);
                 $data['id'] = $pdo->lastInsertId();
                 echo json_encode($data);
-                break;
+                break;  //     {
+                          //     "nombre":"MIERDA"
+                            // } ingresar dato en el posman para quer veas que se realiza la accion 
             case 'PUT':
-                IDNoEncontrado($id);
-                $data = json_decode(file_get_contents('php://input'), true);
+                validarID($id);
+                
+                $data = json_decode(file_get_contents('php://input'),true);
+                
+                
+                if (!$data || empty($data['nombre'])) {
+                    echo json_encode(['error' => 'El campo nombre es obligatorio']);
+                    break;
+                }
+                
                 $stmt = $pdo->prepare("UPDATE categorias SET nombre = ? WHERE id = ?");
                 $stmt->execute([$data['nombre'], $id]);
-                echo json_encode($data);
-                break;
                 
-        }
+                echo json_encode(['mensaje' => 'Categoría actualizada correctamente']);
+                break;
+                       //{
+                    //     "nombre":"meliza"  
+                      // } se tiene que escirbir esto en un postman
+        } 
         break;
 }
+?>
+
 
 
 
