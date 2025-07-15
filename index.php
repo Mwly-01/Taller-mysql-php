@@ -93,9 +93,42 @@ switch ($recurso) {
                 $stmt = $pdo->prepare("DELETE FROM categorias WHERE id = ?");
                 $stmt->execute([$id]);
                 
-                echo json_encode($categoria);  // Cambié $product por $categoria
-                break;
+                echo json_encode($categoria);  
         }
+    case 'productos':
+        switch ($method) {
+            case 'GET':
+                if($id){ 
+                    $stmt = $pdo->prepare("SELECT * FROM productos WHERE id = ?");
+                    $stmt->execute([$id]);
+                    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    echo json_encode(($productos));
+                }else{
+                    $stmt = $pdo->prepare("SELECT * FROM productos");
+                    $stmt->execute();
+                    $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    echo json_encode($productos);
+                }
+                break;
+            case 'POST':
+                $data = json_decode(file_get_contents('php://input'), true);
+                    if ($data === null) {
+                    http_response_code(400);
+                    echo json_encode([
+                        'error' => 'JSON inválido o no enviado',
+                        'code' => 400,
+                        'errorUrl' => 'https://http.cat/400'
+                    ]);
+                    exit;
+                }
+                $stmt = $pdo->prepare("INSERT INTO productos(nombre,precio,categoria_id)VALUES(?,?,?)");
+                $stmt->execute([$data['nombre'], $data['precio'],$data['categoria_id']]);
+                http_response_code(201);
+                $data['id'] = $pdo->lastInsertId();
+                echo json_encode($data);
+                break;
         break;
+
 }
-?>
+
+}

@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS promociones(
     descripcion TEXT,
     descuento DECIMAL(5,2) CHECK (descuento >= 0 AND descuento <= 100),
     producto_id INT,
-    Foreign Key (producto_id) REFERENCES productos(id) ON DELETE CASCADE ON UPDATE CASCADE  
-)
+    Foreign Key (producto_id) REFERENCES productos(id)
+    
 
 
 INSERT INTO categorias (nombre) VALUES
