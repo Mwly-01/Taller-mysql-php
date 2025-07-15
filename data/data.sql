@@ -1,9 +1,9 @@
 -- Active: 1752442371044@@127.0.0.1@3306@php_pbo
 
-CREATE DATABASE IF NOT EXISTS taller_api;
-USE  taller_api;
+CREATE DATABASE IF NOT EXISTS php_pbo;
+USE  php_pbo;
 
-DROP DATABASE IF NOT EXISTS taller_api;
+DROP DATABASE IF NOT EXISTS php_pbo;
 
 DROP TABLE IF EXISTS promociones;
 DROP TABLE IF EXISTS productos;
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS productos(
     nombre VARCHAR(100) NOT NULL,
     precio DECIMAL(10 , 2) NOT NULL,
     categoria_id  INT,
-    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE CASCADE  ON UPDATE CASCADE
 )
 
 CREATE TABLE IF NOT EXISTS promociones(
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS promociones(
     descripcion TEXT,
     descuento DECIMAL(5,2) CHECK (descuento >= 0 AND descuento <= 100),
     producto_id INT,
-    Foreign Key (producto_id) REFERENCES productos(id)
+    Foreign Key (producto_id) REFERENCES productos(id) ON DELETE CASCADE ON UPDATE CASCADE  
 )
 
 

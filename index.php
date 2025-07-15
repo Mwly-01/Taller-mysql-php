@@ -74,11 +74,28 @@ switch ($recurso) {
                        //{
                     //     "nombre":"meliza"  
                       // } se tiene que escirbir esto en un postman
-        } 
+            case 'DELETE':
+                validarID($id);
+                $stmt = $pdo->prepare("SELECT * FROM categorias WHERE id = ?");
+                $stmt->execute([$id]);
+                $categoria = $stmt->fetch(PDO::FETCH_ASSOC);  // Cambié $producto por $categoria
+                
+                if (!$categoria) {
+                    http_response_code(404);
+                    echo json_encode([
+                        'error' => 'Categoría no encontrada',
+                        'code' => 404,
+                        'errorUrl' => 'https://http.cat/404'
+                    ]);
+                    exit;
+                }
+                
+                $stmt = $pdo->prepare("DELETE FROM categorias WHERE id = ?");
+                $stmt->execute([$id]);
+                
+                echo json_encode($categoria);  // Cambié $product por $categoria
+                break;
+        }
         break;
 }
 ?>
-
-
-
-
